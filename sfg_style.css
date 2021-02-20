@@ -1,0 +1,33 @@
+body {
+    font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
+    font-size: 14px;
+  }
+
+  #cy {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    bottom: 0;
+    right: 0;
+    z-index: 99;
+    margin-right: 50%;
+  }
+
+  h1 {
+    opacity: 0.5;
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  .sfg-section {
+    margin-right: 50%;
+  }
+
+  #feature-toggle {
+    position: absolute;
+    z-index: 100;
+  }
+
+  #sfg-extra {
+      display: flex;
+  }

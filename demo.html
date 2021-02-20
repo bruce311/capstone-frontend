@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>cytoscape graph drawing algorithm demo</title>
+
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+    <!-- for testing with local version of cytoscape.js -->
+    <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.js"></script>
+    <script src="cytoscape-edgehandles.js"></script>
+
+    <link rel="stylesheet" href="sfg_style.css">
+
+    <script src="sfg.json"></script>
+    <script src="sfg_script.js"></script>
+
+    <!-- bode plots -->
+
+    <meta charset="UTF-8">
+
+    <!-- Math.js cdn -->
+    <script src="https://unpkg.com/mathjs@5.2.3/dist/math.min.js"></script>
+
+    <!-- Chart.js cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="bode_style.css">
+    <script src="bode_script.js"></script>
+
+    <!-- LaTex display -->
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+  </head>
+
+  <body>
+    <div id="sfg-extra">
+        <p> Switch to magnitude</p>
+        <input type="checkbox" id="feature-toggle">
+        <!-- <section id="feature-toggle"> Toggle switch </section> -->
+    </div>
+
+    <div class="sfg-section">
+      <h1>SFG section</h1>
+      <div id="cy"></div>
+    </div>
+
+    <div class = "bode-section">
+      <h1>Bode plot section</h1>
+      <input type="text" id="transfer-function">
+      <p id="output"></p>
+      <div class="plot-container">
+          <div class="plot-0">
+              <canvas id="module-plot"></canvas>
+          </div>
+          <div class="plot-1">
+              <canvas id="phase-plot"></canvas>
+          </div>
+      </div>
+    </div>
+  </body>
+
+</html>
