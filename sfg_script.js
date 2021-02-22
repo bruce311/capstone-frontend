@@ -153,42 +153,34 @@ var sfg_data =
     }
 };
 
-// console.log(sfg_data.sfg.elements.nodes);
-
 // symbolic vs magnitude feature toggle
-var symbolic_flag = false
-
-
-var sfg_elements = sfg_data.sfg.elements;
-var edge_length = sfg_data.sfg.elements.edges.length;
-var sfg_edges = []
-
+let symbolic_flag = false
+let sfg_elements = JSON.parse(JSON.stringify(sfg_data.sfg.elements))
+let edge_length = sfg_data.sfg.elements.edges.length
 
 function edge_helper() {
+    let sfg_edges = []
     if (symbolic_flag) {
         for (i = 0; i < edge_length; i++) {
-            var new_edge = sfg_data.sfg.elements.edges[i]
+            let new_edge = JSON.parse(JSON.stringify(sfg_data.sfg.elements.edges[i]))
             new_edge.data.weight = new_edge.data.weight.symbolic
             sfg_edges.push(new_edge)
         }
     } else {
         for (i = 0; i < edge_length; i++) {
-            var new_edge = sfg_data.sfg.elements.edges[i]
+            let new_edge = JSON.parse(JSON.stringify(sfg_data.sfg.elements.edges[i]))
             new_edge.data.weight = new_edge.data.weight.magnitude
+
             sfg_edges.push(new_edge)
         }
     }
-    sfg_elements.edges = sfg_edges
+    sfg_elements.edges = JSON.parse(JSON.stringify(sfg_edges))
 }
 
 // generate the edited edge list
 edge_helper()
 
 function load_sfg() {
-
-    var con = document.getElementById('cy')
-    console.log(con)
-
     var cy = window.cy = cytoscape({
         container: document.getElementById('cy'),
 
@@ -268,39 +260,27 @@ function load_sfg() {
             }
         }
         ],
+
         elements: sfg_elements
     });
 }
-
 
 document.addEventListener('DOMContentLoaded', load_sfg);
 
 
 function sfg_toggle() {
-    console.log("event toggle triggered")
     symbolic_flag = !symbolic_flag
     edge_helper()
     load_sfg()
 }
 
-console.log("after loading sfg graph")
-console.log(document)
-
-// feature toggles
-var ab = document.querySelector("#feature-toggle");
-console.log(ab)
-var el = document.getElementById("sfg-extra");
-console.log(el)
-
-
-var cd = document.getElementById('cy');
-console.log(cd)
-
-
+let el = document.getElementById("feature-toggle");
 if (el) {
     el.addEventListener('click', sfg_toggle)
-    console.log(symbolic_flag)
 }
+
+
+
 
 
 
