@@ -7,20 +7,16 @@ body {
     position: absolute;
     left: 0;
     top: 50px;
-    bottom: 0;
+    bottom: 200px;
     right: 0;
     z-index: 99;
-    margin-right: 50%;
+    margin-right: 60%;
   }
 
   h1 {
     opacity: 0.5;
     font-size: 1em;
     font-weight: bold;
-  }
-
-  .sfg-section {
-    margin-right: 50%;
   }
 
   #feature-toggle {
@@ -30,4 +26,37 @@ body {
 
   #sfg-extra {
       display: flex;
+  }
+
+  .panels {
+    display: flex
+  }
+
+  .circuit-panel {
+    margin-top: 80%;
+    padding: 20px;
+    border: 1px solid black;
+  }
+
+  .left-layer {
+    display: flex;
+    width: 40%;
+  }
+
+  .right-layer {
+    display: inline-block;
+    width: 40%;
+    margin-left: 30px;
+  }
+
+  .parameter-panel {
+    width: 20%;
+    border: 1px solid black;
+    padding: 10px;
+  }
+
+  .transfer-panel {
+    padding: 10px;
+    vertical-align: top;
+    border: 1px solid black;
   }
