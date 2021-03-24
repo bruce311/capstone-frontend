@@ -34,8 +34,6 @@ body {
 
   .circuit-panel {
     margin-top: 80%;
-    padding: 20px;
-    border: 1px solid black;
   }
 
   .left-layer {
@@ -56,7 +54,7 @@ body {
   }
 
   .transfer-panel {
-    padding: 10px;
-    vertical-align: top;
-    border: 1px solid black;
+    /* padding: 10px; */
+    /* vertical-align: top;
+    border: 1px solid black; */
   }

@@ -3,34 +3,17 @@
 <html>
   <head>
     <title>cytoscape graph drawing algorithm demo</title>
-
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
     <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.js"></script>
     <script src="cytoscape-edgehandles.js"></script>
-
-    <link rel="stylesheet" href="sfg_style.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="sfg_script.js" defer></script>
-
-    <!-- bode plots -->
-    <meta charset="UTF-8">
-
-    <!-- Math.js cdn -->
-    <script src="https://unpkg.com/mathjs@5.2.3/dist/math.min.js"></script>
-
-    <!-- Chart.js cdn -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
-
+    
+    <link rel="stylesheet" href="sfg_style.css">
     <link rel="stylesheet" href="bode_style.css">
-    <script src="bode_script.js"></script>
-
-    <!-- LaTex display -->
-    <!-- <script type="text/javascript" id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-    </script> -->
   </head>
 
   <body>
@@ -51,7 +34,7 @@
         </div>
 
         <div class="circuit-panel">
-          <img src="circuit.png" width="400" height="300">
+          <div id="circuit-svg"></div>
         </div>
         
       </div>
@@ -62,8 +45,19 @@
           <h1> Circuit Parameters </h1>
         </div>
         <div id="transfer-form">
-          <h1> Transfer Function Parameters </h1>
+          <h1> Transfer Function </h1>
         </div>
+        <div id="transfer-func-bode-form">
+          <h1> Transfer Function Bode Plot </h1>
+        </div>
+
+        <div id="loop-gain-form">
+          <h1> Loop Gain </h1>
+        </div>
+        <div id="loop-gain-bode-form">
+          <h1> Loop Gain Bode Plot </h1>
+        </div>
+
       </div>
 
       <div class="right-layer"> 
@@ -72,41 +66,32 @@
           <div id="trans-funtion"></div>
         </div>
 
+        <div class="loop-gain-panel">  
+          <h1> Loop Gain: </h1>
+          <div id="loop-gain"></div>
+        </div>
+
         <div class = "bode-section">
           <h1>Bode plot section</h1>
-          <input type="text" id="transfer-function">
-          <p id="output"></p>
           <div class="plot-container">
               <div class="plot-0">
-                  <canvas id="module-plot"></canvas>
+                  <canvas id="transfer-bode-plot"></canvas>
               </div>
               <div class="plot-1">
-                  <canvas id="phase-plot"></canvas>
-              </div>
+                <canvas id="loop-gain-bode-plot"></canvas>
+            </div>
           </div>
         </div>
-        
 
-       
-  
       </div>
-  
-      
-
-      
-
-      
-      
-
-      
-  
-
     </div> 
-    
+    <div id="latex-script">
 
-    
+    </div>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
 
-    
-  </body>
-
+  </body> 
+  
 </html>
