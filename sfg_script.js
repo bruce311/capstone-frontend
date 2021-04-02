@@ -29,6 +29,9 @@ function edge_helper(sample_data, flag) {
     return sfg_elements
 }
 
+// log sfg module loading time
+const time1 = new Date()
+
 function make_sfg(elements) {
     var cy = window.cy = cytoscape({
         container: document.getElementById('cy'),
@@ -124,6 +127,10 @@ function make_sfg(elements) {
 
         elements: elements
     });
+
+    const time2 = new Date()
+    let time_elapse = (time2 - time1)/1000
+    console.log("SFG loading time: " + time_elapse + " seconds")
 }
 
 
@@ -169,7 +176,7 @@ function make_parameter_panel(parameters) {
                 form_data[key] = parseFloat(i)
             }
         }
-    sfg_patch_request(form_data)
+        sfg_patch_request(form_data)
 
     });
 
@@ -178,7 +185,13 @@ function make_parameter_panel(parameters) {
 
 
 function sfg_patch_request(params) {
-    fetch(`http://127.0.0.1:5000/circuits/${circuitId}`, {
+
+    let fields = "id,name,parameters,sfg,svg"
+
+    let url = new URL(`http://127.0.0.1:5000/circuits/${circuitId}`)
+    url.searchParams.append("fields", fields)
+
+    fetch(url, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -254,7 +267,8 @@ document.addEventListener('DOMContentLoaded', load_interface);
 async function sfg_toggle() {
     symbolic_flag = !symbolic_flag
     try {
-        const response = await fetch(`http://127.0.0.1:5000/circuits/${circuitId}`)
+        let url = new URL(`http://127.0.0.1:5000/circuits/${circuitId}`)
+        const response = await fetch(url)
         let data = await response.json()
         update_frontend(data)
     } catch {
@@ -332,7 +346,11 @@ function make_transfer_func_panel() {
 }
 
 function make_transfer_func(input_node, output_node) {
-    let params = {input_node: input_node, output_node: output_node}
+    let latex_toggle = true
+    let factor_toggle = true
+    let numerical_toggle = true
+    let params = {input_node: input_node, output_node: output_node, latex: latex_toggle,
+        factor: factor_toggle, numerical: numerical_toggle}
     var url = new URL(`http://127.0.0.1:5000/circuits/${circuitId}/transfer_function`)
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     fetch(url)
@@ -353,6 +371,7 @@ function make_schematics(data) {
     }
     else {
         var svg_html = document.getElementById("circuit-svg")
+
         svg_html.innerHTML = data.svg
         const svg = document.querySelector("#circuit-svg > svg")
         
@@ -365,7 +384,7 @@ function make_schematics(data) {
         // Add a black border to the SVG so it's easier to visualize it.
         svg.setAttribute("style", "border:1px solid black");
         svg.setAttribute("height", "400px");
-        svg.setAttribute("width", "600px");
+        svg.setAttribute("width", "800px");
     }
 }
 
@@ -466,20 +485,7 @@ function fetch_transfer_bode_data(input_params) {
 
 
 function make_bode_plots(data, dom_element) {
-    /**
-     * Generate logspace.
-     * @param {Float} min Starting number
-     * @param {Float} max Ending number
-     * @param {Float} step Step (multiplied by)
-     */
-    function logspace(min, max, step){
-        let v = []
-        for(let i = min; i <= max; i *= step){
-            v.push(i.toExponential());
-        }
-        return v;
-    }
-
+    let freq_points = []
     let gain_points = [];
     let phase_points = [];
     let frequency = data["frequency"]
@@ -488,6 +494,8 @@ function make_bode_plots(data, dom_element) {
 
     let i;
     for (i=0; i < frequency.length; i++) {
+        freq_points.push(Number.parseFloat(frequency[i].toExponential(0)).toFixed(0))
+ 
         let gain_pair = {
             x: frequency[i],
             y: gain[i]
@@ -501,11 +509,11 @@ function make_bode_plots(data, dom_element) {
         phase_points.push(phase_pair)
     }  
 
-    let start_freq = frequency[0]
-    let end_freq = frequency[frequency.length-1]
-    let points_per_decade = frequency.length; // used later for plotting the grid
+    // console.log(freq_points)
+    // console.log(gain_points)
+    // console.log(phase_points)
 
-    xs = logspace(start_freq, end_freq, 10)
+    xs = freq_points
 
     var lineChartData = {
         labels: xs,
@@ -526,6 +534,14 @@ function make_bode_plots(data, dom_element) {
         }]
     };
 
+    let graph_label
+    if (dom_element === 'transfer-bode-plot') {
+        graph_label = 'Transfer Function Bode Plot'
+    } 
+    else if (dom_element === 'loop-gain-bode-plot') {
+        graph_label = 'Loop Gain Bode Plot'
+    }
+
     var ctx = document.getElementById(dom_element).getContext('2d');
     window.myLine = Chart.Line(ctx, {
         data: lineChartData,
@@ -535,32 +551,49 @@ function make_bode_plots(data, dom_element) {
             stacked: false,
             title: {
                 display: true,
-                text: 'Transfer Function Bode Plot'
+                text: graph_label
             },
             scales: {
                 xAxes: [{
-                    stepSize: 0.5
+      
+                    afterTickToLabelConversion: function(data){
+                        var xLabels = data.ticks;
+                        
+                        xLabels.forEach((labels, i) => {
+                            if (i % 10 != 0) {
+                                xLabels[i] = '';
+                            }
+                        });
+
+                    },             
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Hz'
+                    }
                 }],
                 yAxes: [{
-                    type: 'logarithmic', 
+                    type: 'linear', 
                     display: true,
                     position: 'left',
                     id: 'y-axis-1',
-                    ticks: {
-                        suggestedMin: gain[0],
-                        suggestedMax: gain[gain.length-1]
-                    },
-                    stepSize: 0.5
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'db'
+                    }
                 }, {
                     type: 'linear', 
                     display: true,
                     position: 'right',
                     id: 'y-axis-2',
                     ticks: {
-                        suggestedMin: phase[phase.length-1],
-                        suggestedMax: phase[0]
+                        min: -180,
+                        max: 180,
                     },
-                    stepSize: 0.5
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'deg'
+                    },
+                    stepSize: 1
                 }],
             }
         }

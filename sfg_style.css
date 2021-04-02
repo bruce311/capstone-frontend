@@ -7,7 +7,7 @@ body {
     position: absolute;
     left: 0;
     top: 50px;
-    bottom: 200px;
+    bottom: 450px;
     right: 0;
     z-index: 99;
     margin-right: 60%;
@@ -33,7 +33,7 @@ body {
   }
 
   .circuit-panel {
-    margin-top: 80%;
+    margin-top: 75%;
   }
 
   .left-layer {
